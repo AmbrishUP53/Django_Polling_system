@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results - {{ poll.title }}</title>
+</head>
+
+<body>
+
+    <h1>{{ poll.title }}</h1>
+
+    <h2>Poll Results</h2>
+
+    <p>
+        Total Votes: <strong>{{ total_votes }}</strong>
+    </p>
+
+    <hr>
+
+    {% for candidate in candidates %}
+
+        <div>
+
+            <h3>{{ candidate.name }}</h3>
+
+            <p>
+                Votes:
+                <strong>{{ candidate.vote_count }}</strong>
+            </p>
+
+            <p>
+                Percentage:
+                <strong>{{ candidate.percentage }}%</strong>
+            </p>
+
+        </div>
+
+        <hr>
+
+    {% empty %}
+
+        <p>No candidates found.</p>
+
+    {% endfor %}
+
+    <a href="{% url 'home' %}">
+        Back to Polls
+    </a>
+
+</body>
+</html>

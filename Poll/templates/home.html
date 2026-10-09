@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Polling System</title>
+</head>
+
+<body>
+    <h1>Polling System</h1>
+    <p>
+        Welcome, {{ request.user.username }}
+    </p>
+    <a href="{% url 'logout' %}">Logout</a>
+    <hr>
+    <h2>Available Polls</h2>
+    {% if polls %}
+        {% for poll in polls %}
+            <div>
+                <h3>{{ poll.title }}</h3>
+                <p>{{ poll.description }}</p>
+                <p>
+                    Start:
+                    {{ poll.start_time }}
+                </p>
+                <p>
+                    End:
+                    {{ poll.end_time }}
+                </p>
+                <strong>
+                    Status: {{ poll.status }}
+                </strong>
+                <br><br>
+                {% if poll.status == "Active" %}
+                    <a href="{%url 'vote' poll.id%}">
+                        Vote Now
+                    </a>
+                {% elif poll.status == "Not Started" %}
+                    <p>Voting has not started yet.</p>
+                {% else %}
+                    <a href="{%url 'results' poll.id%}">
+                        View Results
+                    </a>
+                {% endif %}
+
+            </div>
+
+            <hr>
+
+        {% endfor %}
+
+    {% else %}
+
+        <p>No polls available.</p>
+
+    {% endif %}
+
+</body>
+</html>
