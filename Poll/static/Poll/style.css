@@ -1,0 +1,277 @@
+
+/* ---------- Global ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* ---------- Navigation ---------- */
+.navbar {
+    background: #172554;
+    color: white;
+    padding: 16px 6%;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.brand {
+    color: white;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.welcome {
+    color: #e0e7ff;
+    font-size: 14px;
+}
+
+/* ---------- Main Layout ---------- */
+.container {
+    width: 88%;
+    max-width: 1200px;
+    margin: 35px auto;
+}
+
+.hero {
+    background: linear-gradient(120deg, #1e3a8a, #2563eb);
+    color: white;
+    padding: 38px;
+    border-radius: 18px;
+    margin-bottom: 35px;
+}
+
+.hero h1 {
+    font-size: 32px;
+    margin-bottom: 8px;
+}
+
+.hero p {
+    color: #dbeafe;
+    max-width: 650px;
+}
+
+/* ---------- Poll Section ---------- */
+.poll-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.poll-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 22px;
+}
+
+.poll-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    padding: 23px;
+    box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.poll-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.09);
+}
+
+.poll-card h3 {
+    font-size: 20px;
+    margin: 14px 0 8px;
+    overflow-wrap: anywhere;
+}
+
+.description {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.poll-meta {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 15px;
+    display: grid;
+    gap: 12px;
+}
+
+.poll-meta div {
+    display: flex;
+    flex-direction: column;
+}
+
+.poll-meta span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.poll-meta strong {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.poll-action {
+    margin-top: 22px;
+}
+
+/* ---------- Status Badges ---------- */
+.status {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.status-active {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.status-not-started {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.status-ended {
+    color: #475569;
+    background: #e2e8f0;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 17px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary {
+    color: white;
+    background: #2563eb;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-secondary {
+    color: white;
+    background: #334155;
+}
+
+.btn-secondary:hover {
+    background: #1e293b;
+}
+
+.btn-outline {
+    color: white;
+    border: 1px solid #93c5fd;
+    background: transparent;
+}
+
+.btn-outline:hover {
+    background: #1e40af;
+}
+
+.muted {
+    color: #64748b;
+    font-size: 14px;
+}
+
+/* ---------- Empty State & Footer ---------- */
+.empty-state {
+    background: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 15px;
+    color: #64748b;
+}
+
+.empty-state h3 {
+    color: #172033;
+    margin-bottom: 8px;
+}
+
+.footer {
+    text-align: center;
+    color: #64748b;
+    font-size: 13px;
+    padding: 25px 15px;
+    margin-top: 40px;
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 600px) {
+    .navbar {
+        padding: 14px 5%;
+    }
+
+    .nav-container {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .nav-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .brand {
+        font-size: 19px;
+    }
+
+    .container {
+        width: 90%;
+        margin: 22px auto;
+    }
+
+    .hero {
+        padding: 25px 21px;
+        border-radius: 14px;
+    }
+
+    .hero h1 {
+        font-size: 26px;
+    }
+
+    .poll-section h2 {
+        font-size: 21px;
+    }
+
+    .poll-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Login Page CSS */

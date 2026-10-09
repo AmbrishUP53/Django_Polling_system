@@ -1,31 +1,89 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login - Polling System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Polling System</title>
+    <link rel="stylesheet" href="{% static 'Poll/style.css' %}">
+    <link rel="stylesheet" href="{% static 'Poll/login.css' %}">
 </head>
 <body>
-    <h1>Login</h1>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="brand">
+            🗳️ Polling System
+        </a>
+    </div>
+</nav>
 
-    <form method="POST">
-        {% csrf_token %}
+<main class="auth-container">
+    <section class="auth-card">
+        <h1>Welcome Back</h1>
+        <p class="auth-subtitle">Log in to participate in polls.</p>
 
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <br><br>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <br><br>
+        {% if form.errors %}
+            <div class="message error">
+                Invalid username or password. Please try again.
+            </div>
+        {% endif %}
 
-        <button type="submit">Login</button>
-    </form>
-    <p>
-    Don't have an account?
-    <a href="{% url 'register' %}">Create Account</a>
-</p>
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-button">
+                Login →
+            </button>
+        </form>
+        {% comment %} {% if error %}
+            <div class="message error">
+                {{ error }}
+            </div>
+        {% endif %}  {% endcomment %}
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="{% url 'register' %}">Create one</a>
+        </p>
+    </section>
+</main>
+
+<footer class="footer">
+    Polling System · Academic Project
+</footer>
+
 </body>
 </html>
+

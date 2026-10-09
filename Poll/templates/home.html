@@ -1,57 +1,125 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Polling System</title>
-</head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polling System | Dashboard</title>
 
+    <link rel="stylesheet" href="{% static 'Poll/style.css' %}">
+</head>
 <body>
-    <h1>Polling System</h1>
-    <p>
-        Welcome, {{ request.user.username }}
-    </p>
-    <a href="{% url 'logout' %}">Logout</a>
-    <hr>
-    <h2>Available Polls</h2>
-    {% if polls %}
-        {% for poll in polls %}
-            <div>
-                <h3>{{ poll.title }}</h3>
-                <p>{{ poll.description }}</p>
-                <p>
-                    Start:
-                    {{ poll.start_time }}
-                </p>
-                <p>
-                    End:
-                    {{ poll.end_time }}
-                </p>
-                <strong>
-                    Status: {{ poll.status }}
-                </strong>
-                <br><br>
-                {% if poll.status == "Active" %}
-                    <a href="{%url 'vote' poll.id%}">
-                        Vote Now
-                    </a>
-                {% elif poll.status == "Not Started" %}
-                    <p>Voting has not started yet.</p>
-                {% else %}
-                    <a href="{%url 'results' poll.id%}">
-                        View Results
-                    </a>
-                {% endif %}
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="brand">
+            🗳️ Polling System
+        </a>
+
+        <div class="nav-right">
+            <span class="welcome">
+                Welcome, {{ request.user.username }}
+            </span>
+
+            <a href="{% url 'logout' %}" class="btn btn-outline">
+                Logout
+            </a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="hero">
+        <h1>Your Voice Matters.</h1>
+        <p>
+            Explore available polls, cast your vote when voting is open,
+            and view results once a poll has ended.
+        </p>
+    </section>
+
+    <section class="poll-section">
+        <h2>Available Polls</h2>
+
+        {% if polls %}
+            <div class="poll-grid">
+
+                {% for poll in polls %}
+                    <article class="poll-card">
+
+                        <div>
+                            {% if poll.status == "Active" %}
+                                <span class="status status-active">
+                                    Active
+                                </span>
+                            {% elif poll.status == "Not Started" %}
+                                <span class="status status-not-started">
+                                    Not Started
+                                </span>
+                            {% else %}
+                                <span class="status status-ended">
+                                    Ended
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <h3>{{ poll.title }}</h3>
+
+                        <p class="description">
+                            {{ poll.description|default:"No description available." }}
+                        </p>
+
+                        <div class="poll-meta">
+                            <div>
+                                <span>Start Time</span>
+                                <strong>
+                                    {{ poll.start_time|date:"d M Y, h:i A" }}
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span>End Time</span>
+                                <strong>
+                                    {{ poll.end_time|date:"d M Y, h:i A" }}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="poll-action">
+                            {% if poll.status == "Active" %}
+                                <a href="{% url 'vote' poll.id %}"
+                                   class="btn btn-primary">
+                                    Vote Now →
+                                </a>
+                            {% elif poll.status == "Not Started" %}
+                                <span class="muted">
+                                    Voting hasn't started yet.
+                                </span>
+                            {% else %}
+                                <a href="{% url 'results' poll.id %}"
+                                   class="btn btn-secondary">
+                                    View Results →
+                                </a>
+                            {% endif %}
+                        </div>
+
+                    </article>
+                {% endfor %}
 
             </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No polls available yet</h3>
+                <p>Please check back when a new poll is published.</p>
+            </div>
+        {% endif %}
+    </section>
 
-            <hr>
+</main>
 
-        {% endfor %}
-
-    {% else %}
-
-        <p>No polls available.</p>
-
-    {% endif %}
+<footer class="footer">
+    Polling System · Academic Project
+</footer>
 
 </body>
 </html>

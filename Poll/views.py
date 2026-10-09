@@ -83,16 +83,85 @@ def home(request):
     })
 
 
+# @login_required
+# def vote(request, poll_id):
+#     poll = get_object_or_404(Polls, id=poll_id)
+
+#     now = timezone.now()
+
+#     # Poll has not started
+#     if now < poll.start_time:
+#         return render(request, 'vote.html', {
+#             'poll': poll,
+#             'status': 'not_started'
+#         })
+
+#     # Poll has ended
+#     if now > poll.end_time:
+#         return redirect('results', poll_id=poll.id)
+
+#     # Check if user has already voted
+#     already_voted = Vote.objects.filter(
+#         user=request.user,
+#         poll=poll
+#     ).exists()
+
+#     if already_voted:
+#         return render(request, 'vote.html', {
+#             'poll': poll,
+#             'status': 'already_voted'
+#         })
+
+#     # Handle vote submission
+#     if request.method == 'POST':
+
+#         candidate_id = request.POST.get('candidate')
+
+#         if not candidate_id:
+#             return render(request, 'vote.html', {
+#                 'poll': poll,
+#                 'status': 'active',
+#                 'error': 'Please select a candidate.'
+#             })
+
+#         # Make sure candidate belongs to this poll
+#         candidate = get_object_or_404(
+#             Candidate,
+#             id=candidate_id,
+#             Polls=poll
+#         )
+
+#     with transaction.atomic():
+#         # Save vote
+#         Vote.objects.create(
+#             user=request.user,
+#             poll=poll,
+#             candidate=candidate
+#         )
+
+#         return render(request, 'vote.html', {
+#             'poll': poll,
+#             'status': 'success',
+#             'candidate': candidate
+#         })
+
+#     # Show voting form
+#     return render(request, 'vote.html', {
+#         'poll': poll,
+#         'status': 'active'
+#     })
+
 @login_required
 def vote(request, poll_id):
     poll = get_object_or_404(Polls, id=poll_id)
-
+    candidates = poll.candidates.all()
     now = timezone.now()
 
     # Poll has not started
     if now < poll.start_time:
         return render(request, 'vote.html', {
             'poll': poll,
+            'candidates': candidates,
             'status': 'not_started'
         })
 
@@ -109,17 +178,18 @@ def vote(request, poll_id):
     if already_voted:
         return render(request, 'vote.html', {
             'poll': poll,
+            'candidates': candidates,
             'status': 'already_voted'
         })
 
     # Handle vote submission
     if request.method == 'POST':
-
         candidate_id = request.POST.get('candidate')
 
         if not candidate_id:
             return render(request, 'vote.html', {
                 'poll': poll,
+                'candidates': candidates,
                 'status': 'active',
                 'error': 'Please select a candidate.'
             })
@@ -131,16 +201,17 @@ def vote(request, poll_id):
             Polls=poll
         )
 
-    with transaction.atomic():
         # Save vote
-        Vote.objects.create(
-            user=request.user,
-            poll=poll,
-            candidate=candidate
-        )
+        with transaction.atomic():
+            Vote.objects.create(
+                user=request.user,
+                poll=poll,
+                candidate=candidate
+            )
 
         return render(request, 'vote.html', {
             'poll': poll,
+            'candidates': candidates,
             'status': 'success',
             'candidate': candidate
         })
@@ -148,6 +219,7 @@ def vote(request, poll_id):
     # Show voting form
     return render(request, 'vote.html', {
         'poll': poll,
+        'candidates': candidates,
         'status': 'active'
     })
 

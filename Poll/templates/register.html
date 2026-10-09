@@ -1,38 +1,100 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Register - Polling System</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Polling System</title>
+
+    <link rel="stylesheet" href="{% static 'Poll/style.css' %}">
+    <link rel="stylesheet" href="{% static 'Poll/register.css' %}">
 </head>
 <body>
 
-    <h1>Create Account</h1>
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="{% url 'home' %}" class="brand">
+            🗳️ Polling System
+        </a>
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
-    {% endif %}
+        <div class="nav-right">
+            <a href="{% url 'login' %}" class="btn btn-outline">
+                Login
+            </a>
+        </div>
+    </div>
+</nav>
 
-    <form method="POST">
-        {% csrf_token %}
+<main class="auth-container">
+    <section class="auth-card">
 
-        <label>Username:</label>
-        <input type="text" name="username" required>
-        <br><br>
+        <h1>Create Account</h1>
+        <p class="auth-subtitle">
+            Join the polling system and make your voice count.
+        </p>
 
-        <label>Password:</label>
-        <input type="password" name="password" required>
-        <br><br>
+        {% if error %}
+            <div class="message error">
+                {{ error }}
+            </div>
+        {% endif %}
 
-        <label>Confirm Password:</label>
-        <input type="password" name="confirm_password" required>
-        <br><br>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
 
-        <button type="submit">Register</button>
-    </form>
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Choose a username"
+                    autocomplete="username"
+                    required
+                >
+            </div>
 
-    <p>
-        Already have an account?
-        <a href="{% url 'login' %}">Login</a>
-    </p>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Create a password"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    placeholder="Enter your password again"
+                    autocomplete="new-password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-button">
+                Create Account →
+            </button>
+        </form>
+
+        <p class="auth-switch">
+            Already have an account?
+            <a href="{% url 'login' %}">Login here</a>
+        </p>
+
+    </section>
+</main>
+
+<footer class="footer">
+    Polling System · Academic Project
+</footer>
 
 </body>
 </html>
+

@@ -1,101 +1,190 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>{{ poll.title }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cast Your Vote | Polling System</title>
+
+    <link rel="stylesheet" href="{% static 'Poll/style.css' %}">
+    <link rel="stylesheet" href="{% static 'Poll/vote.css' %}">
 </head>
 
 <body>
 
-{% if status == "not_started" %}
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
 
-    <!-- NOT STARTED -->
+            <a href="{% url 'home' %}" class="brand">
+                🗳️ Polling System
+            </a>
 
-    <h1>{{ poll.title }}</h1>
+            <div class="nav-right">
+                <span class="welcome">
+                    {{ request.user.username }}
+                </span>
 
-    <h2>Voting has not started yet.</h2>
+                <a href="{% url 'logout' %}" class="btn btn-outline">
+                    Logout
+                </a>
+            </div>
 
-    <p>
-        Start Time: {{ poll.start_time }}
-    </p>
-
-    <a href="{% url 'home' %}">
-        Back to Polls
-    </a>
+        </div>
+    </nav>
 
 
-{% elif status == "active" %}
+    <!-- Main Vote Section -->
+    <main class="vote-container">
 
-    <!-- ACTIVE POLL -->
+        <!-- Poll Header -->
+        <header class="vote-header">
+            <h1>{{ poll.title }}</h1>
 
-    <h1>{{ poll.title }}</h1>
+            <p class="vote-description">
+                {{ poll.description|default:"Choose your preferred candidate below." }}
+            </p>
+        </header>
 
-    <p>{{ poll.description }}</p>
 
-    {% if error %}
-        <p style="color: red;">
-            {{ error }}
-        </p>
-    {% endif %}
+        <!-- Poll Status Messages -->
+        {% if status == "not_started" %}
 
-    <h2>Select your candidate</h2>
+            <div class="message">
+                Voting has not started yet.
+            </div>
 
-    <form method="POST">
-        {% csrf_token %}
-        {% for candidate in poll.candidates.all %}
-            <div>
-                <input
-                    type="radio"
-                    name="candidate"
-                    value="{{ candidate.id }}"
-                    required
-                >
-                <label>
+        {% elif status == "already_voted" %}
+
+            <div class="message">
+                You have already voted in this poll.
+            </div>
+
+        {% elif status == "success" %}
+
+            <div class="message success">
+                Your vote has been recorded successfully!
+            </div>
+
+            {% if candidate %}
+                <p class="selected-candidate">
+                    Your selected candidate:
                     <strong>{{ candidate.name }}</strong>
-                </label>
+                </p>
+            {% endif %}
+
+        {% endif %}
+
+
+        <!-- Validation Error -->
+        {% if error %}
+            <div class="message error">
+                {{ error }}
+            </div>
+        {% endif %}
+
+
+        <!-- Voting Form: Only Available When Active -->
+        {% if status == "active" %}
+
+            <div class="vote-notice">
+                <strong>One person, one vote.</strong>
                 <p>
-                    {{ candidate.description }}
+                    Select your preferred candidate carefully.
+                    Your vote cannot be changed after submission.
                 </p>
             </div>
-            <hr>
-        {% endfor %}
-        <button type="submit">
-            Submit Vote
-        </button>
-    </form>
-    <br>
-    <a href="{% url 'home' %}">
-        Back to Polls
-    </a>
 
-{% elif status == "success" %}
-    <h1>Vote Submitted Successfully!</h1>
-    <p>
-        You voted for:
-        <strong>{{ candidate.name }}</strong>
-    </p>
-    <p>
-        You cannot vote again in this poll.
-    </p>
-    <a href="{% url 'home' %}">
-        Back to Polls
-    </a>
+            <form
+                method="post"
+                action="{% url 'vote' poll.id %}"
+                class="vote-form"
+            >
 
-{% elif status == "already_voted" %}
+                {% csrf_token %}
 
-    <!-- ALREADY VOTED -->
+                <h2>Select a Candidate</h2>
 
-    <h1>{{ poll.title }}</h1>
+                <div class="candidate-list">
 
-    <h2>You have already voted in this poll.</h2>
+                    {% for candidate in candidates %}
 
-    <p>
-        You cannot vote again in this poll.
-    </p>
+                        <label class="candidate-option">
 
-    <a href="{% url 'home' %}">
-        Back to Polls
-    </a>
+                            <input
+                                type="radio"
+                                name="candidate"
+                                value="{{ candidate.id }}"
+                                required
+                            >
 
-    {% endif %}
+                            <div class="candidate-info">
+
+                                <h3>{{ candidate.name }}</h3>
+
+                                <p>
+                                    {{ candidate.description|default:"No description available." }}
+                                </p>
+
+                            </div>
+
+                        </label>
+
+                    {% empty %}
+
+                        <p class="empty-message">
+                            No candidates are available for this poll.
+                        </p>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <!-- Form Actions -->
+                {% if candidates %}
+                    <div class="vote-actions">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >
+                            Submit Vote →
+                        </button>
+
+                        <a
+                            href="{% url 'home' %}"
+                            class="vote-back"
+                        >
+                            ← Back to Dashboard
+                        </a>
+
+                    </div>
+                {% endif %}
+
+            </form>
+
+        {% endif %}
+
+
+        <!-- Navigation Back -->
+        {% if status != "active" %}
+            <div class="vote-actions">
+                <a href="{% url 'home' %}" class="vote-back">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        {% endif %}
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        Polling System · Academic Project
+    </footer>
+
 </body>
 </html>
+

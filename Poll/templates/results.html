@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>Results - {{ poll.title }}</title>
@@ -45,6 +45,143 @@
     <a href="{% url 'home' %}">
         Back to Polls
     </a>
+
+</body>
+</html> {% endcomment %}
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Poll Results | Polling System</title>
+
+    <link rel="stylesheet" href="{% static 'Poll/style.css' %}">
+    <link rel="stylesheet" href="{% static 'Poll/result.css' %}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="brand">
+                🗳️ Polling System
+            </a>
+
+            <div class="nav-right">
+                <span class="welcome">{{ request.user.username }}</span>
+                <a href="{% url 'logout' %}" class="btn btn-outline">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Results Content -->
+    <main class="results-container">
+
+        <header class="results-header">
+            <span class="results-eyebrow">POLL SUMMARY</span>
+            <h1>{{ poll.title }}</h1>
+            <p>
+                {{ poll.description|default:"Here are the results of this poll." }}
+            </p>
+        </header>
+
+
+        <!-- Results Notice -->
+        <section class="results-notice">
+            <span class="notice-icon">📊</span>
+            <div>
+                <h2>Election Results</h2>
+                <p>Review the votes received by each candidate below.</p>
+            </div>
+        </section>
+
+
+        <!-- Candidate Results -->
+        <section class="results-section">
+            <h2>Candidate Vote Counts</h2>
+
+            {% for candidate in candidates %}
+                <article class="result-card">
+
+                    <div class="result-top">
+                        <div class="candidate-heading">
+                            <span class="candidate-avatar">
+                                {{ candidate.name|first|upper }}
+                            </span>
+
+                            <div class="candidate-details">
+                                <h3>{{ candidate.name }}</h3>
+                                <p>
+                                    {{ candidate.description|default:"Candidate" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="vote-total">
+                            <strong>{{ candidate.vote_count|default:0 }}</strong>
+                            <span>
+                                {% if candidate.vote_count == 1 %}
+                                    vote
+                                {% else %}
+                                    votes
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div
+                        class="vote-progress"
+                        role="progressbar"
+                        aria-label="Votes for {{ candidate.name }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                        aria-valuenow="{{ candidate.percentage|default:0 }}"
+                    >
+                        <div
+                            class="vote-progress-fill"
+                            style="width: {{ candidate.percentage|default:0 }}%;"
+                        ></div>
+                    </div>
+
+                    <div class="result-bottom">
+                        <span>Share of votes</span>
+                        <strong>{{ candidate.percentage|default:0 }}%</strong>
+                    </div>
+
+                </article>
+
+            {% empty %}
+                <div class="results-empty">
+                    <span>📭</span>
+                    <h3>No candidates found</h3>
+                    <p>There are no candidates to display for this poll.</p>
+                </div>
+            {% endfor %}
+        </section>
+
+
+        <!-- Back Navigation -->
+        <div class="results-actions">
+            <a href="{% url 'home' %}" class="btn btn-primary">
+                ← Back to Dashboard
+            </a>
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="footer">
+        Polling System · Academic Project
+    </footer>
 
 </body>
 </html>
