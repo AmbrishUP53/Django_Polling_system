@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,3 +121,64 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 STATIC_URL = 'static/'
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Polling System Admin",
+    "site_header": "Polling System",
+    "site_brand": "Polling System",
+    "welcome_sign": "Welcome to the Polling System Administration",
+    "copyright": "Polling System - Academic Project",
+
+    "show_ui_builder": True,
+
+    "topmenu_links": [
+        {"name": "Home", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"name": "View Website", "url": "/", "new_window": True},
+    ],
+
+    "order_with_respect_to": [
+        "Poll",
+        "Poll.Polls",
+        "Poll.Candidate",
+        "Poll.Vote",
+        "auth",
+        "auth.user",
+        "auth.group",
+    ],
+
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
+        "Poll": "fas fa-poll",
+        "Poll.Polls": "fas fa-chart-bar",
+        "Poll.Candidate": "fas fa-user-tie",
+        "Poll.Vote": "fas fa-vote-yea",
+    },
+
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "hide_apps": [],
+    "hide_models": [],
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "dark_mode_theme": "darkly",
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "sidebar_small_text": False,
+    "sidebar_nav_small_text": False,
+    "navbar": "navbar-dark",
+    "sidebar": "sidebar-dark-primary",
+    "accent": "accent-primary",
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "success": "btn-success",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+    },
+}
